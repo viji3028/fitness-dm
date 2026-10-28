@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Wellness+ | Fitness and Wellness Centre</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        .hero {
+            min-height: 570px;
+            display: flex;
+            align-items: center;
+            padding: 70px 8%;
+            background:
+                linear-gradient(90deg, #101410 15%, #101410d9 65%, #10141066),
+                url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1800&q=85");
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 7vw, 75px);
+            line-height: 1.1;
+            margin: 18px 0;
+        }
+
+        .hero h1 span,
+        .highlight {
+            color: #b9f34a;
+        }
+
+        .hero p {
+            color: #ddd;
+            margin-bottom: 22px;
+        }
+
+        .section {
+            padding: 70px 8%;
+            text-align: center;
+        }
+
+        .section h2 {
+            font-size: 34px;
+            margin: 10px 0 20px;
+        }
+
+        .description {
+            max-width: 720px;
+            margin: auto;
+            color: #c8c8c8;
+        }
+
+        .programs {
+            background: #171c17;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+            margin-top: 35px;
+            text-align: left;
+        }
+
+        .card {
+            background: #222922;
+            border: 1px solid #394333;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #b9f34a;
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 22px;
+        }
+
+        .card-content h3 {
+            margin-bottom: 10px;
+        }
+
+        .card-content p {
+            color: #ccc;
+        }
+
+        .promo {
+            padding: 65px 8%;
+            text-align: center;
+            background: #252e22;
+        }
+
+        .promo h2 {
+            font-size: 35px;
+            margin: 15px 0;
+        }
+
+        .promo p,
+        .contact p {
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            color: #b9f34a;
+            letter-spacing: 3px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 20px;
+            margin: 6px;
+            background: #b9f34a;
+            color: #101410;
+            border: 1px solid #b9f34a;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .btn:hover {
+            background: white;
+            border-color: white;
+        }
+
+        .outline {
+            color: white;
+            background: transparent;
+        }
+
+        .outline:hover {
+            color: #101410;
+        }
+
+        .social {
+            display: inline-block;
+            margin-top: 10px;
+            color: #b9f34a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 750px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 65px 6%;
+            }
+
+            .section h2,
+            .promo h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">WELLNESS<span class="highlight">+</span></div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="#about">About</a>
+        <a href="#programs">Programs</a>
+        <a href="#contact">Contact</a>
+        <a href="/login" class="nav-btn">Login</a>
+        <a href="/register" class="nav-btn">Join Now</a>
+    </nav>
+</header>
+
+<!-- HOME SECTION -->
+
+<section class="hero">
+    <div class="hero-content">
+        <p class="tag">YOUR FITNESS. YOUR FUTURE.</p>
+
+        <h1>
+            BUILD A STRONGER<br>
+            <span>YOU.</span>
+        </h1>
+
+        <p>
+            Transform your body, improve your mind,
+            and build a healthier lifestyle with our
+            fitness and wellness programs.
+        </p>
+
+        <a href="/register" class="btn">START YOUR JOURNEY</a>
+        <a href="#programs" class="btn outline">EXPLORE PROGRAMS</a>
+    </div>
+</section>
+
+<!-- ABOUT SECTION -->
+
+<section id="about" class="section">
+    <p class="tag">ABOUT US</p>
+
+    <h2>Your Health. Our Priority.</h2>
+
+    <p class="description">
+        Welcome to Wellness and Fitness Centre!
+        We help people work towards their fitness goals
+        through workout programs, yoga, personal training,
+        and healthy lifestyle guidance.
+        Our goal is to make fitness simple, enjoyable,
+        and part of everyday life.
+    </p>
+</section>
+
+<!-- FITNESS PROGRAMS -->
+
+<section id="programs" class="section programs">
+    <p class="tag">WHAT WE OFFER</p>
+
+    <h2>Explore Our Programs</h2>
+
+    <p class="description">
+        Discover the right program for your fitness journey.
+    </p>
+
+    <div class="cards">
+
+        <div class="card">
+            <img
+                src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=800&q=80"
+                alt="Strength training workout">
+
+            <div class="card-content">
+                <h3>Strength Training</h3>
+                <p>
+                    Improve strength and fitness with
+                    guided workout sessions.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img
+                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80"
+                alt="Yoga and wellness">
+
+            <div class="card-content">
+                <h3>Yoga & Meditation</h3>
+                <p>
+                    Support flexibility, relaxation,
+                    and mental wellness.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img
+                src="https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=800&q=80"
+                alt="Cardio fitness training">
+
+            <div class="card-content">
+                <h3>Cardio Fitness</h3>
+                <p>
+                    Build stamina and make movement
+                    a regular part of your lifestyle.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- DIGITAL MARKETING PROMOTION -->
+
+<section class="promo">
+    <p class="tag">YOUR TRANSFORMATION STARTS HERE</p>
+
+    <h2>Make Your Health a Priority</h2>
+
+    <p>
+        Join our fitness community and take the first
+        step towards a healthier lifestyle.
+    </p>
+
+    <a href="/register" class="btn">JOIN OUR COMMUNITY</a>
+</section>
+
+<!-- INSTAGRAM PROMOTION -->
+
+<section id="contact" class="section contact">
+    <p class="tag">FOLLOW OUR JOURNEY</p>
+
+    <h2>Connect With Us</h2>
+
+    <p>
+        Follow our Instagram page for workout tips,
+        wellness ideas, fitness updates, and special offers.
+    </p>
+
+    <!-- Replace the URL below with your actual Instagram profile URL -->
+    <a
+        href="https://www.instagram.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn">
+        FOLLOW US ON INSTAGRAM
+    </a>
+
+    <p style="margin-top: 15px;">
+        Wellness & Fitness Centre
+    </p>
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+    <p>© 2026 Wellness+ Fitness Centre</p>
+    <p>Fitness • Health • Wellness</p>
+    <p>Digital Marketing Mini Project</p>
+</footer>
+
+</body>
+</html>

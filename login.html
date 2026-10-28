@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Login | Wellness+</title>
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        body {
+            background: #101410;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .login-box {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 25px;
+            background: #202820;
+            border: 1px solid #b9f34a;
+            border-radius: 14px;
+        }
+
+        h1, h2 {
+            color: #b9f34a;
+        }
+
+        h1, .subtitle {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 16px;
+            margin-bottom: 7px;
+        }
+
+        input, textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #586653;
+            border-radius: 6px;
+            background: #101410;
+            color: white;
+        }
+
+        textarea {
+            min-height: 85px;
+            overflow-wrap: anywhere;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #b9f34a;
+            color: #101410;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .security {
+            margin-top: 25px;
+            padding: 18px;
+            border: 1px solid #586653;
+            border-radius: 10px;
+        }
+
+        .note {
+            font-size: 13px;
+            color: #ccc;
+        }
+
+        #status {
+            color: #b9f34a;
+            overflow-wrap: anywhere;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        a {
+            color: #b9f34a;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">WELLNESS<span>+</span></div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/register">Register</a>
+    </nav>
+</header>
+
+<div class="login-box">
+
+    <h1>Secure Login</h1>
+    <p class="subtitle">Welcome to Wellness+ Fitness Centre</p>
+
+    <!-- LOGIN DETAILS -->
+    <form action="/login" method="POST">
+
+        <label for="email">Email ID</label>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email ID"
+            autocomplete="username"
+            required>
+
+        <label for="password">Password</label>
+        <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <!-- AES ENCRYPTION DEMO -->
+    <div class="security">
+
+        <h2>AES Email Encryption</h2>
+
+        <p class="note">
+            Enter an email above. Click the button below to encrypt
+            the email using AES-256-GCM.
+        </p>
+
+        <button type="button" onclick="encryptEmail()">
+            Encrypt Email ID
+        </button>
+
+        <label for="encryptedEmail">Encrypted Message</label>
+        <textarea id="encryptedEmail" readonly
+                  placeholder="Encrypted email will appear here"></textarea>
+
+        <button type="button" onclick="decryptEmail()">
+            Decrypt Email
+        </button>
+
+        <label for="decryptedEmail">Decrypted Email</label>
+        <textarea id="decryptedEmail" readonly
+                  placeholder="Original email will appear here"></textarea>
+
+        <p id="status"></p>
+
+        <p class="note">
+            Project demonstration: this browser-generated key is temporary.
+            It is not the website's real login security mechanism.
+        </p>
+
+    </div>
+
+    <div class="links">
+        <p>New user? <a href="/register">Create an account</a></p>
+        <a href="/">← Back to Home</a>
+    </div>
+
+</div>
+
+<script>
+let aesKey = null;
+let savedIV = null;
+let savedCiphertext = null;
+
+function toBase64(bytes) {
+    let binary = "";
+
+    for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+
+    return btoa(binary);
+}
+
+async function encryptEmail() {
+    try {
+        const email = document.getElementById("email").value.trim();
+
+        if (!email) {
+            alert("Please enter your email ID first!");
+            return;
+        }
+
+        // Generate a temporary AES-256 key
+        aesKey = await crypto.subtle.generateKey(
+            {
+                name: "AES-GCM",
+                length: 256
+            },
+            false,
+            ["encrypt", "decrypt"]
+        );
+
+        // Generate a new random IV
+        savedIV = crypto.getRandomValues(new Uint8Array(12));
+
+        // Encrypt the email
+        const encrypted = await crypto.subtle.encrypt(
+            {
+                name: "AES-GCM",
+                iv: savedIV
+            },
+            aesKey,
+            new TextEncoder().encode(email)
+        );
+
+        savedCiphertext = new Uint8Array(encrypted);
+
+        document.getElementById("encryptedEmail").value =
+            "IV: " + toBase64(savedIV) +
+            "\nEncrypted Data: " + toBase64(savedCiphertext);
+
+        document.getElementById("decryptedEmail").value = "";
+
+        document.getElementById("status").textContent =
+            "Success! Email encrypted using AES-256-GCM.";
+
+    } catch (error) {
+        document.getElementById("status").textContent =
+            "Encryption error: " + error.message;
+    }
+}
+
+async function decryptEmail() {
+    try {
+        if (!aesKey || !savedIV || !savedCiphertext) {
+            alert("First enter an email and click Encrypt Email ID.");
+            return;
+        }
+
+        const decrypted = await crypto.subtle.decrypt(
+            {
+                name: "AES-GCM",
+                iv: savedIV
+            },
+            aesKey,
+            savedCiphertext
+        );
+
+        const originalEmail = new TextDecoder().decode(decrypted);
+
+        document.getElementById("decryptedEmail").value = originalEmail;
+
+        document.getElementById("status").textContent =
+            "Success! Email decrypted.";
+
+    } catch (error) {
+        document.getElementById("status").textContent =
+            "Decryption failed.";
+    }
+}
+</script>
+
+</body>
+</html>

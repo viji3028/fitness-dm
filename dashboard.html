@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Wellness+</title>
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        body {
+            background: #101410;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .welcome {
+            padding: 40px 7%;
+            background: #202820;
+        }
+
+        .welcome h1 {
+            color: #b9f34a;
+        }
+
+        .dashboard-content {
+            max-width: 850px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .fitness-card, .security-card {
+            background: #202820;
+            border: 1px solid #45513e;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-content h2 {
+            color: #b9f34a;
+        }
+
+        .security-card label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .security-card textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            min-height: 90px;
+            background: #101410;
+            color: white;
+            border: 1px solid #596352;
+            border-radius: 6px;
+        }
+
+        .security-card button {
+            padding: 12px 16px;
+            margin: 10px 5px 5px 0;
+            border: none;
+            border-radius: 5px;
+            background: #b9f34a;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .notice {
+            color: #d0d0d0;
+            font-size: 13px;
+        }
+
+        #status {
+            color: #b9f34a;
+            overflow-wrap: anywhere;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">WELLNESS<span>+</span></div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+    </nav>
+</header>
+
+<section class="welcome">
+    <p class="tag">YOUR FITNESS JOURNEY</p>
+    <h1>Welcome to Your Dashboard!</h1>
+    <p>Stay active. Stay healthy. Stay secure.</p>
+</section>
+
+<main class="dashboard-content">
+
+    <section class="fitness-card">
+        <h2>Your Fitness Centre</h2>
+        <p>Explore our fitness and wellness programs.</p>
+        <p>💪 Strength Training</p>
+        <p>🧘 Yoga and Meditation</p>
+        <p>🏃 Cardio Fitness</p>
+        <p>🥗 Healthy Lifestyle Guidance</p>
+    </section>
+
+    <section class="security-card">
+        <h2>AES-256-GCM Security</h2>
+
+        <p>
+            This section demonstrates encryption and decryption
+            using the AES-256-GCM algorithm in your browser.
+        </p>
+
+        <button onclick="generateKey()">
+            Generate AES Key
+        </button>
+
+        <label for="keyDisplay">AES Key (Base64)</label>
+        <textarea id="keyDisplay" readonly
+                  placeholder="Click Generate AES Key"></textarea>
+
+        <p class="notice">
+            Demonstration only: this key is visible in the browser.
+            Do not use this displayed key to protect real customer data.
+        </p>
+
+        <label for="plainText">Enter Text to Encrypt</label>
+        <textarea id="plainText"
+                  placeholder="Enter sample fitness information"></textarea>
+
+        <button onclick="encryptData()">Encrypt Data</button>
+
+        <label for="encryptedText">Encrypted Output</label>
+        <textarea id="encryptedText" readonly
+                  placeholder="Encrypted output appears here"></textarea>
+
+        <button onclick="decryptData()">Decrypt Data</button>
+
+        <label for="decryptedText">Decrypted Output</label>
+        <textarea id="decryptedText" readonly
+                  placeholder="Original text appears here"></textarea>
+
+        <p id="status"></p>
+    </section>
+
+    <section class="fitness-card">
+        <h2>Stay Connected</h2>
+        <p>Follow our fitness updates and wellness tips on Instagram.</p>
+
+        <a href="https://www.instagram.com/"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="btn">
+           Visit Instagram
+        </a>
+
+        <a href="/" class="btn">Home Page</a>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 Wellness+ Fitness Centre</p>
+    <p>Digital Marketing and Data Security Mini Project</p>
+</footer>
+
+<script>
+let aesKey = null;
+
+function toBase64(bytes) {
+    let binary = "";
+
+    for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+
+    return btoa(binary);
+}
+
+function fromBase64(text) {
+    const binary = atob(text);
+
+    const bytes = new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+
+    return bytes;
+}
+
+async function generateKey() {
+    try {
+        if (!crypto.subtle) {
+            throw new Error("Open the website through localhost or HTTPS.");
+        }
+
+        aesKey = await crypto.subtle.generateKey(
+            {
+                name: "AES-GCM",
+                length: 256
+            },
+            true,
+            ["encrypt", "decrypt"]
+        );
+
+        const rawKey = await crypto.subtle.exportKey("raw", aesKey);
+
+        document.getElementById("keyDisplay").value =
+            toBase64(new Uint8Array(rawKey));
+
+        document.getElementById("encryptedText").value = "";
+        document.getElementById("decryptedText").value = "";
+
+        document.getElementById("status").textContent =
+            "AES-256 key generated successfully.";
+
+    } catch (error) {
+        document.getElementById("status").textContent = error.message;
+    }
+}
+
+async function encryptData() {
+    try {
+        if (!aesKey) {
+            throw new Error("First click Generate AES Key.");
+        }
+
+        const text = document.getElementById("plainText").value;
+
+        if (!text) {
+            throw new Error("Enter text to encrypt.");
+        }
+
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+
+        const encrypted = await crypto.subtle.encrypt(
+            {
+                name: "AES-GCM",
+                iv: iv
+            },
+            aesKey,
+            new TextEncoder().encode(text)
+        );
+
+        document.getElementById("encryptedText").value =
+            JSON.stringify({
+                iv: toBase64(iv),
+                ciphertext: toBase64(new Uint8Array(encrypted))
+            });
+
+        document.getElementById("decryptedText").value = "";
+
+        document.getElementById("status").textContent =
+            "Data encrypted successfully using AES-256-GCM.";
+
+    } catch (error) {
+        document.getElementById("status").textContent = error.message;
+    }
+}
+
+async function decryptData() {
+    try {
+        if (!aesKey) {
+            throw new Error("Generate the AES key first.");
+        }
+
+        const data = JSON.parse(
+            document.getElementById("encryptedText").value
+        );
+
+        const decrypted = await crypto.subtle.decrypt(
+            {
+                name: "AES-GCM",
+                iv: fromBase64(data.iv)
+            },
+            aesKey,
+            fromBase64(data.ciphertext)
+        );
+
+        document.getElementById("decryptedText").value =
+            new TextDecoder().decode(decrypted);
+
+        document.getElementById("status").textContent =
+            "Data decrypted successfully.";
+
+    } catch (error) {
+        document.getElementById("decryptedText").value = "";
+
+        document.getElementById("status").textContent =
+            "Decryption failed. Check the key or encrypted data.";
+    }
+}
+</script>
+
+</body>
+</html>
